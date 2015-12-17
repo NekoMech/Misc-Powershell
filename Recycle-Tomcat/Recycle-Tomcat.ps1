@@ -44,7 +44,7 @@ PARAM(
         HelpMessage="Number of times to retry if the initial service recycle fails")]
      [ValidateRange(0,100)]
      [int]
-     $sount = 5
+     $Count = 5
 
 )
 
@@ -58,13 +58,13 @@ PROCESS{
     Get-Service -ServerList $c -name Tomcat7 | Stop-Service
 
     Write-Verbose "Removing Tomcat work folder on $c"
-    Remove-Item -Path "\\$s\D$\Program Files\Apache Software Foundation\Tomcat 7.0\work" -Recurse
+    Remove-Item -Path "\\$c\D$\Program Files\Apache Software Foundation\Tomcat 7.0\work" -Recurse
 
     Write-Verbose "Removing Tomcat log files on $c"
-    Remove-Item -Path "\\$s\D$\Program Files\Apache Software Foundation\Tomcat 7.0\logs\*.*" -Recurse
+    Remove-Item -Path "\\$c\D$\Program Files\Apache Software Foundation\Tomcat 7.0\logs\*.*" -Recurse
 
     Write-Verbose "Removing CWCTravel log files"
-    Remove-Item -Path "\\$s\D$\cwctravel\logs\*.*" -Recurse
+    Remove-Item -Path "\\$c\D$\cwctravel\logs\*.*" -Recurse
 
     Write-Verbose "Starting Tomcat7 service on $c"
     Get-Service -ServerList $c -name Tomcat7 | Start-Service
@@ -75,7 +75,7 @@ PROCESS{
     } else {
         $i = 0
         DO {Get-Service -ServerList $c -name Tomcat7 | Start-Service; $i++}
-        UNTIL ((Get-Service -ServerList $c -name Tomcat7).Status -eq "Running" -OR $i -ge $sount)
+        UNTIL ((Get-Service -ServerList $c -name Tomcat7).Status -eq "Running" -OR $i -ge $Count)
     }
 }
 	
