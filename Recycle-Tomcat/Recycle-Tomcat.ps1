@@ -55,7 +55,7 @@ PROCESS{
     foreach($c in $ComputerName) {
 
     Write-Verbose "Stopping Tomcat7 service on $c"
-    Get-Service -ServerList $c -name Tomcat7 | Stop-Service
+    Get-Service -ComputerName $c -name Tomcat7 | Stop-Service
 
     Write-Verbose "Removing Tomcat work folder on $c"
     Remove-Item -Path "\\$c\D$\Program Files\Apache Software Foundation\Tomcat 7.0\work" -Recurse
@@ -67,15 +67,15 @@ PROCESS{
     Remove-Item -Path "\\$c\D$\cwctravel\logs\*.*" -Recurse
 
     Write-Verbose "Starting Tomcat7 service on $c"
-    Get-Service -ServerList $c -name Tomcat7 | Start-Service
+    Get-Service -ComputerName $c -name Tomcat7 | Start-Service
 
     Write-Verbose "Checking to make sure that the Tomcat7 service is started"
-    If((Get-Service -ServerList $c -name Tomcat7).Status -eq "Running") {
+    If((Get-Service -ComputerName $c -name Tomcat7).Status -eq "Running") {
         Write-Verbose "Tomcat has been restarted successfully on $c"
     } else {
         $i = 0
-        DO {Get-Service -ServerList $c -name Tomcat7 | Start-Service; $i++}
-        UNTIL ((Get-Service -ServerList $c -name Tomcat7).Status -eq "Running" -OR $i -ge $Count)
+        DO {Get-Service -ComputerName $c -name Tomcat7 | Start-Service; $i++}
+        UNTIL ((Get-Service -ComputerName $c -name Tomcat7).Status -eq "Running" -OR $i -ge $Count)
     }
 }
 	
