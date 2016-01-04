@@ -17,7 +17,7 @@ Function Restart-Tomcat {
 .DESCRIPTION
 	This function gets a list of servers from a text file and iterates through them, stopping the tomcat7 service, cleaning up the tomcat work folder, cleaning up tomcat logs, then starting tomcat7 again.
 
-.PARAMETER	ComputerName
+.PARAMETER ComputerName
 	Specifies the path of a text file to get-content from, which should be a list of servers.
 
 .PARAMETER Count
@@ -71,9 +71,6 @@ PARAM(
         HelpMessage="File path of file that contains server names")]
     [string]
     $Path
-
-
-
 )
 
 PROCESS{
@@ -95,8 +92,8 @@ PROCESS{
     Write-Verbose "Removing Tomcat log files on $s"
     Remove-Item -Path "\\$s\D$\Program Files\Apache Software Foundation\Tomcat 7.0\logs\*.*" -Recurse
 
-    Write-Verbose "Removing CWCTravel log files"
-    Remove-Item -Path "\\$s\D$\cwctravel\logs\*.*" -Recurse
+    Write-Verbose "Removing log files"
+    Remove-Item -Path "\\$s\D$\logfolder\logs\*.*" -Recurse
 
     Write-Verbose "Starting Tomcat7 service on $s"
     Get-Service -ComputerName $s -name Tomcat7 | Start-Service
