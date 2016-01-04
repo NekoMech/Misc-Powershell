@@ -17,17 +17,27 @@ Function Restart-Tomcat {
 .DESCRIPTION
 	This function gets a list of servers from a text file and iterates through them, stopping the tomcat7 service, cleaning up the tomcat work folder, cleaning up tomcat logs, then starting tomcat7 again.
 
-.PARAMETER	ServerList
+.PARAMETER	ComputerName
 	Specifies the path of a text file to get-content from, which should be a list of servers.
 
 .PARAMETER Count
     Specifies the number of retries if the first service recycle fails
+    
+.PARAMETER FromFile
+    Switch that when used requires the user to pass a -Path of a text file that contains Computer Names.
+    
+.PARAMETER Path
+    Path of a file that contains computer names, which the function will run against.
 
 .EXAMPLE
-    Recycle-Tomcat -ComputerName "C:\tmp\ls_preproduction_app.txt" -Count 5
+    Example 1
+    Restart-Tomcat -ComputerName "Server01","Server02" -Count 5
+    
+    Exmaple 2
+    Restart-Tomcat -FromFile -Path "\\FileServer\Share\all_app_servers.txt" -Count 5
 
 .NOTES
-    This was designed to be ran in a scheduled task, which is why I am calling the function at the bottom.
+    
 
 #>
 
@@ -68,7 +78,6 @@ PARAM(
 
 PROCESS{
 
-    #$ComputerName = Get-Content -Path $ServerList
     If($FromFile) {
         $ServerList = Get-Content $Path
     } else {
